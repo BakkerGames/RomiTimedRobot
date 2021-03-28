@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.hal.SimDevice;
@@ -31,7 +30,6 @@ public class Robot extends TimedRobot {
   double leftEncoder = 0.0;
   double rightEncoder = 0.0;
 
-  final double DEAD_ZONE = 0.2;
   final double SPEED_SCALE = 0.9;
   final double TURN_SCALE = 0.8;
   final double TURN_SPEED_MIN = 0.3;
