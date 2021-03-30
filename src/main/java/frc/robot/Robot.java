@@ -82,17 +82,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    // m_autoSelected = m_chooser.getSelected();
+    // // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    // System.out.println("Auto selected: " + m_autoSelected);
 
-    m_drivetrain.resetEncoders();
-    gyroOffset = gyro.get();
+    // m_drivetrain.resetEncoders();
+    // gyroOffset = gyro.get();
 
-    autoStage = 1;
+    // autoStage = 1;
 
-    driveY = 0;
-    driveX = 0;
+    // driveY = 0;
+    // driveX = 0;
 
     timer.reset();
   }
@@ -100,57 +100,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    if (timer.get() < 1.0) {
-      return;
-    }
-
-    switch (autoStage) {
-      case 1:
-        drive(13);
-        break;
-      case 2:
-        turn(-70);
-        break;
-      case 3:
-        drive(13.5);
-        break;
-      case 4:
-        turn(-88);
-        break;
-      case 5:
-        drive(6);
-        break;
-      case 6:
-        turn(-40);
-        break;
-      case 7:
-        drive(7);
-        break;
-      case 8:
-        turn(45);
-        break;
-      case 9:
-        drive(7);
-        break;
-      case 10:
-        turn(100);
-        break;
-      case 11:
-        drive(13.5);
-        break;
-      case 12:
-        turn(95);
-        break;
-      case 13:
-        drive(14);
-        break;
-      default:
-        driveY = 0.0;
-        driveX = 0.0;
-        break;
-    }
-
-    m_drivetrain.arcadeDrive(driveY, driveX);
+    AutonomousLogic.ManageLogic(timer, robotCommand);
+    RobotOutput.ManageOutput(m_drivetrain, robotCommand);
   }
 
   /** This function is called once when teleop is enabled. */
@@ -161,76 +112,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-      ControllerInput.ManageInput(xboxController, robotCommand);
-      m_drivetrain.arcadeDrive(robotCommand.driveSpeed, 0.0);
-    
-//    driveY = 0.0;
-//    driveX = 0.0;
-//
-//    if (xboxController.getYButton()) {
-//      if (driveStraightPressed == false) {
-//        gyroOffset = gyro.get();
-//        driveStraightPressed = true;
-//      }
-//
-//      driveY = 0.8;
-//    } else if ((Math.abs(xboxController.getY(Hand.kLeft)) > DEAD_ZONE) && !xboxController.getBButton()
-//        && !xboxController.getXButton()) {
-//
-//      driveY = -xboxController.getY(Hand.kLeft) * SPEED_SCALE;
-//      driveStraightPressed = false;
-//    } else {
-//      driveStraightPressed = false;
-//    }
-//
-//    if (xboxController.getYButton()) {
-//      driveX = -(getGyroAngle() / 20);
-//    } else if (xboxController.getBButton()) {
-//      if (turningPressed == false) {
-//        gyroOffset = gyro.get();
-//        m_drivetrain.resetEncoders();
-//        targetEncoder = TURNING_FACTOR * 90;
-//        turningPressed = true;
-//      }
-//
-//      if ((getGyroAngle() - 90.0) > -10.0) {
-//        driveX = 0;
-//      } else {
-//        driveX = -(((getGyroAngle() - 90.0) / 90.0) * 0.25) + 0.25;
-//      }
-//
-//    } else if (xboxController.getXButton()) {
-//      if (turningPressed == false) {
-//        gyroOffset = gyro.get();
-//        m_drivetrain.resetEncoders();
-//        targetEncoder = TURNING_FACTOR * -90;
-//        turningPressed = true;
-//      }
-//
-//      if ((getGyroAngle() + 90.0) < 10.0) {
-//        driveX = 0;
-//      } else {
-//        driveX = -(((getGyroAngle() + 90.0) / 90.0) * 0.25) - 0.25;
-//      }
-//    } else if (Math.abs(xboxController.getX(Hand.kRight)) > DEAD_ZONE) {
-//      driveX = xboxController.getX(Hand.kRight) * TURN_SCALE;
-//      turningPressed = false;
-//    } else {
-//      turningPressed = false;
-//    }
-//
-//    if (xboxController.getAButton()) {
-//      gyroOffset = gyro.get();
-//      m_drivetrain.resetEncoders();
-//    }
-//
-//    if (xboxController.getPOV() == 0) {
-//      gyroTurningScale += 0.01;
-//    } else if (xboxController.getPOV() == 180) {
-//      gyroTurningScale -= 0.01;
-//    }
-//
-//    m_drivetrain.arcadeDrive(driveY, driveX);
+    ControllerInput.ManageInput(xboxController, robotCommand);
+    RobotOutput.ManageOutput(m_drivetrain, robotCommand);
   }
 
   /** This function is called once when the robot is disabled. */
