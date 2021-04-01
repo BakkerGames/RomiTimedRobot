@@ -9,4 +9,8 @@ public class RobotCommand {
    public boolean buttonY;
    public boolean bumperLeft;
    public boolean bumperRight;
+
+   public double lastDriveSpeed;
+   public double lastTurnSpeed;
+   public double driveCycle;
 }
