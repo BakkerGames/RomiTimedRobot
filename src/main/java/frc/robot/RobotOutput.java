@@ -2,21 +2,38 @@ package frc.robot;
 
 public class RobotOutput {
 
-    // private static final double rampUpCount = 4.0;
+    private static final double minDriveSpeed = 0.2;
+    private static final double minTurnSpeed = 0.2;
+    private static final double rampUpMax = 10.0;
 
     public static void ManageOutput(RomiDrivetrain driveTrain, RobotCommand robotCommand) {
         double driveSpeed = robotCommand.driveSpeed;
-        // if (driveSpeed != 0) {
-        //     if (Math.signum(robotCommand.lastDriveSpeed) != Math.signum(driveSpeed)) {
-        //         robotCommand.driveCycle = 0;
-        //     }
-        //     if (robotCommand.driveCycle < rampUpCount) {
-        //         robotCommand.driveCycle += 1;
-        //         driveSpeed = driveSpeed * robotCommand.driveCycle / rampUpCount;
-        //     }
-        // }
-        driveTrain.arcadeDrive(driveSpeed, robotCommand.turnSpeed);
-        robotCommand.lastDriveSpeed = robotCommand.driveSpeed;
+        double turnSpeed = robotCommand.turnSpeed;
+        if (driveSpeed == 0) {
+            robotCommand.rampUpCountDrive = 0;
+        } else {
+            if (robotCommand.rampUpCountDrive < rampUpMax) {
+                driveSpeed = (driveSpeed * robotCommand.rampUpCountDrive) / rampUpMax;
+                if (Math.abs(driveSpeed) < minDriveSpeed) {
+                    robotCommand.rampUpCountDrive = minDriveSpeed * rampUpMax;
+                    driveSpeed = Math.signum(driveSpeed) * minDriveSpeed;
+                }
+                robotCommand.rampUpCountDrive++;
+            }
+        }
+        if (turnSpeed == 0) {
+            robotCommand.rampUpCountTurn = 0;
+        } else {
+            if (robotCommand.rampUpCountTurn < rampUpMax) {
+                turnSpeed = (turnSpeed * robotCommand.rampUpCountTurn) / rampUpMax;
+                if (Math.abs(turnSpeed) < minTurnSpeed) {
+                    robotCommand.rampUpCountTurn = minTurnSpeed * rampUpMax;
+                    turnSpeed = Math.signum(turnSpeed) * minTurnSpeed;
+                }
+                robotCommand.rampUpCountTurn++;
+            }
+        }
+        driveTrain.arcadeDrive(driveSpeed, turnSpeed);
     }
 }
 
