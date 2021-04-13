@@ -33,7 +33,7 @@ public class RobotOutput {
                 robotCommand.rampUpCountDrive++;
             }
         }
-        driveTrain.arcadeDrive(driveSpeed, turnSpeed);
+        driveTrain.arcadeDrive(driveSpeed * 0.9, turnSpeed * 0.8);
     }
 }
 
