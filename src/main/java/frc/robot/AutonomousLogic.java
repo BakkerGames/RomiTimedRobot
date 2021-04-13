@@ -23,14 +23,14 @@ public class AutonomousLogic {
                 break;
             case 1:
                 // drive 10 inches
-                if (sensors.getAvgEncoderValue() < 10.0) {
+                if (sensors.getAvgEncoderValue() < 10.5) {
                     command.driveSpeed = 1.0;
                     return;
                 }
                 break;
             case 2:
                 // turn 90 degrees left
-                if (sensors.gyroAngle() > -70.0) {
+                if (sensors.gyroAngle() > -65.0) {
                     command.turnSpeed = -1.0;
                     return;
                 }
@@ -39,6 +39,13 @@ public class AutonomousLogic {
                 // drive 10 inches
                 if (sensors.getAvgEncoderValue() < 10.0) {
                     command.driveSpeed = 1.0;
+                    return;
+                }
+                break;
+            case 4:
+                // drive back 10 inches
+                if (sensors.getAvgEncoderValue() > -10.0) {
+                    command.driveSpeed = -1.0;
                     return;
                 }
                 break;
