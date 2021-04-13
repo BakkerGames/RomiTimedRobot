@@ -19,17 +19,34 @@ public class AutonomousLogic {
     private static void AutoLogic_ColorConundrum3(RobotSensors sensors, RobotCommand command) {
         switch (command.autonomousStep) {
             case 0:
-                command.autonomousStep++;
-                // drop through to case 1
+                // just reset and move to next step
+                break;
             case 1:
                 // drive 10 inches
-                if (sensors.avgEncoder < 10.0) {
+                if (sensors.getAvgEncoderValue() < 10.0) {
                     command.driveSpeed = 1.0;
-                } else {
-                    command.autonomousStep++;
+                    return;
+                }
+                break;
+            case 2:
+                // turn 90 degrees left
+                if (sensors.gyroAngle() > -70.0) {
+                    command.turnSpeed = -1.0;
+                    return;
+                }
+                break;
+            case 3:
+                // drive 10 inches
+                if (sensors.getAvgEncoderValue() < 10.0) {
+                    command.driveSpeed = 1.0;
+                    return;
                 }
                 break;
         }
+        // move to next step
+        command.autonomousStep++;
+        sensors.resetEncoders();
+        sensors.resetGyro();
     }
 
 }
