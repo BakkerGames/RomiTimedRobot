@@ -1,10 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Timer;
-
 public class AutonomousLogic {
 
-    public static void ManageLogic(Timer timer, RobotCommand command) {
+    public static void ManageLogic(RobotSensors sensors, RobotCommand command) {
+        // clear all command fields so robot doesn't do anything
         command.driveSpeed = 0;
         command.turnSpeed = 0;
         command.buttonA = false;
@@ -13,9 +12,23 @@ public class AutonomousLogic {
         command.buttonY = false;
         command.bumperLeft = false;
         command.bumperRight = false;
-        double timerValue = timer.get();
-        if (timerValue <= 5) {
-            command.driveSpeed = 1;
+        // Color Conundrum Game 3
+        AutoLogic_ColorConundrum3(sensors, command);
+    }
+
+    private static void AutoLogic_ColorConundrum3(RobotSensors sensors, RobotCommand command) {
+        switch (command.autonomousStep) {
+            case 0:
+                command.autonomousStep++;
+                // drop through to case 1
+            case 1:
+                // drive 10 inches
+                if (sensors.avgEncoder < 10.0) {
+                    command.driveSpeed = 1.0;
+                } else {
+                    command.autonomousStep++;
+                }
+                break;
         }
     }
 

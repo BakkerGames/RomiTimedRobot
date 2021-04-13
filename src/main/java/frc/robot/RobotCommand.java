@@ -12,4 +12,6 @@ public class RobotCommand {
 
    public double rampUpCountDrive;
    public double rampUpCountTurn;
+
+   public int autonomousStep;
 }
