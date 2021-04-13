@@ -4,13 +4,25 @@ public class RobotOutput {
 
     private static final double minDriveSpeed = 0.2;
     private static final double minTurnSpeed = 0.2;
-    private static final double rampUpMax = 10.0;
+    private static final double rampUpMax = 20.0;
 
     public static void ManageOutput(RomiDrivetrain driveTrain, RobotCommand robotCommand) {
         double driveSpeed = robotCommand.driveSpeed;
         double turnSpeed = robotCommand.turnSpeed;
         if (driveSpeed == 0) {
             robotCommand.rampUpCountDrive = 0;
+            if (turnSpeed == 0) {
+                robotCommand.rampUpCountTurn = 0;
+            } else {
+                if (robotCommand.rampUpCountTurn < rampUpMax) {
+                    turnSpeed = (turnSpeed * robotCommand.rampUpCountTurn) / rampUpMax;
+                    if (Math.abs(turnSpeed) < minTurnSpeed) {
+                        robotCommand.rampUpCountTurn = minTurnSpeed * rampUpMax;
+                        turnSpeed = Math.signum(turnSpeed) * minTurnSpeed;
+                    }
+                    robotCommand.rampUpCountTurn++;
+                }
+            }
         } else {
             if (robotCommand.rampUpCountDrive < rampUpMax) {
                 driveSpeed = (driveSpeed * robotCommand.rampUpCountDrive) / rampUpMax;
@@ -19,18 +31,6 @@ public class RobotOutput {
                     driveSpeed = Math.signum(driveSpeed) * minDriveSpeed;
                 }
                 robotCommand.rampUpCountDrive++;
-            }
-        }
-        if (turnSpeed == 0) {
-            robotCommand.rampUpCountTurn = 0;
-        } else {
-            if (robotCommand.rampUpCountTurn < rampUpMax) {
-                turnSpeed = (turnSpeed * robotCommand.rampUpCountTurn) / rampUpMax;
-                if (Math.abs(turnSpeed) < minTurnSpeed) {
-                    robotCommand.rampUpCountTurn = minTurnSpeed * rampUpMax;
-                    turnSpeed = Math.signum(turnSpeed) * minTurnSpeed;
-                }
-                robotCommand.rampUpCountTurn++;
             }
         }
         driveTrain.arcadeDrive(driveSpeed, turnSpeed);
